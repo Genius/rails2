@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.executables = ['rails']
   s.rdoc_options = ['--exclude', '.']
 
-  s.add_dependency 'rake',           '>= 0.8.3', '< 11'
+  s.add_dependency 'rake',           '>= 0.8.3'
   s.add_dependency 'activesupport',  "= #{RailsLts::VERSION::STRING}"
   s.add_dependency 'actionpack',     "= #{RailsLts::VERSION::STRING}"
 end

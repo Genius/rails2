@@ -1,5 +1,5 @@
 require 'rake'
-require RAKEVERSION == '0.8.0' ? 'rake/gempackagetask' : 'rubygems/package_task'
+require defined?(RAKEVERSION) && RAKEVERSION == '0.8.0' ? 'rake/gempackagetask' : 'rubygems/package_task'
 require File.expand_path('../railslts-version/lib/railslts-version', __FILE__)
 
 BRANCH = '2-3-lts'
