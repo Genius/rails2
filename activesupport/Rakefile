@@ -1,5 +1,5 @@
 require 'rake/testtask'
-require RAKEVERSION == '0.8.0' ? 'rake/gempackagetask' : 'rubygems/package_task'
+require 'rubygems/package_task'
 
 require File.join(File.dirname(__FILE__), 'lib', 'active_support', 'version')
 require File.expand_path('../../railslts-version/lib/railslts-version', __FILE__)
@@ -24,23 +24,6 @@ Rake::TestTask.new { |t|
 # Create compressed packages
 dist_dirs = [ "lib", "test"]
 
-if RAKEVERSION == '0.8.0'
-  require 'rake/rdoctask'
-
-  # Genereate the RDoc documentation
-  Rake::RDocTask.new do |rdoc|
-    rdoc.rdoc_dir = 'doc'
-    rdoc.title    = "Active Support -- Utility classes and standard library extensions from Rails"
-    rdoc.options << '--line-numbers' << '--inline-source'
-    rdoc.options << '--charset' << 'utf-8'
-    rdoc.template = ENV['template'] ? "#{ENV['template']}.rb" : '../doc/template/horo'
-    rdoc.rdoc_files.include('README', 'CHANGELOG')
-    rdoc.rdoc_files.include('lib/active_support.rb')
-    rdoc.rdoc_files.include('lib/active_support/**/*.rb')
-    rdoc.rdoc_files.exclude('lib/active_support/vendor/*')
-  end
-end
-
 spec = Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
   s.name = PKG_NAME
@@ -58,7 +41,7 @@ spec = Gem::Specification.new do |s|
   s.rubyforge_project = "activesupport"
 end
 
-package_task = RAKEVERSION == '0.8.0' ? Rake::GemPackageTask : Gem::PackageTask
+package_task = Gem::PackageTask
 package_task.new(spec) do |p|
   p.gem_spec = spec
   p.need_tar = true

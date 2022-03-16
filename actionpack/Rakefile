@@ -2,7 +2,7 @@ require 'rubygems'
 require 'rake'
 require 'rake/testtask'
 require 'rake/packagetask'
-require RAKEVERSION == '0.8.0' ? 'rake/gempackagetask' : 'rubygems/package_task'
+require 'rubygems/package_task'
 require File.join(File.dirname(__FILE__), 'lib', 'action_pack', 'version')
 require File.expand_path('../../railslts-version/lib/railslts-version', __FILE__)
 
@@ -43,27 +43,6 @@ Rake::TestTask.new(:test_active_record_integration) do |t|
 end
 
 
-if RAKEVERSION == '0.8.0'
-  require 'rake/rdoctask'
-
-  # Generate the RDoc documentation
-  Rake::RDocTask.new do |rdoc|
-    rdoc.rdoc_dir = 'doc'
-    rdoc.title    = "Action Pack -- On rails from request to response"
-    rdoc.options << '--line-numbers' << '--inline-source'
-    rdoc.options << '--charset' << 'utf-8'
-    rdoc.template = ENV['template'] ? "#{ENV['template']}.rb" : '../doc/template/horo'
-    if ENV['DOC_FILES']
-      rdoc.rdoc_files.include(ENV['DOC_FILES'].split(/,\s*/))
-    else
-      rdoc.rdoc_files.include('README', 'RUNNING_UNIT_TESTS', 'CHANGELOG')
-      rdoc.rdoc_files.include(Dir['lib/**/*.rb'] -
-                              Dir['lib/*/vendor/**/*.rb'])
-      rdoc.rdoc_files.exclude('lib/actionpack.rb')
-    end
-  end
-end
-
 # Create compressed packages
 dist_dirs = [ "lib", "test" ]
 
@@ -94,7 +73,7 @@ spec = Gem::Specification.new do |s|
   end
 end
   
-package_task = RAKEVERSION == '0.8.0' ? Rake::GemPackageTask : Gem::PackageTask
+package_task = Gem::PackageTask
 package_task.new(spec) do |p|
   p.gem_spec = spec
   p.need_tar = true

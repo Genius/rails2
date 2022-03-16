@@ -2,7 +2,7 @@ require 'rubygems'
 require 'rake'
 require 'rake/testtask'
 require 'rake/packagetask'
-require RAKEVERSION == '0.8.0' ? 'rake/gempackagetask' : 'rubygems/package_task'
+require 'rubygems/package_task'
 require File.join(File.dirname(__FILE__), 'lib', 'action_mailer', 'version')
 require File.expand_path('../../railslts-version/lib/railslts-version', __FILE__)
 
@@ -26,22 +26,6 @@ Rake::TestTask.new { |t|
   t.verbose = true
   t.warning = false
 }
-
-if RAKEVERSION == '0.8.0'
-  require 'rake/rdoctask'
-
-  # Generate the RDoc documentation
-  Rake::RDocTask.new do |rdoc|
-    rdoc.rdoc_dir = 'doc'
-    rdoc.title    = "Action Mailer -- Easy email delivery and testing"
-    rdoc.options << '--line-numbers' << '--inline-source' << '-A cattr_accessor=object'
-    rdoc.options << '--charset' << 'utf-8'
-    rdoc.template = ENV['template'] ? "#{ENV['template']}.rb" : '../doc/template/horo'
-    rdoc.rdoc_files.include('README', 'CHANGELOG')
-    rdoc.rdoc_files.include('lib/action_mailer.rb')
-    rdoc.rdoc_files.include('lib/action_mailer/*.rb')
-  end
-end
 
 # Create compressed packages
 spec = Gem::Specification.new do |s|
@@ -68,7 +52,7 @@ spec = Gem::Specification.new do |s|
   s.files = s.files + Dir.glob( "test/**/*" ).delete_if { |item| item.include?( "\.svn" ) }
 end
 
-package_task = RAKEVERSION == '0.8.0' ? Rake::GemPackageTask : Gem::PackageTask
+package_task = Gem::PackageTask
 package_task.new(spec) do |p|
   p.gem_spec = spec
   p.need_tar = true

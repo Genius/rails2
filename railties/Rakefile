@@ -1,6 +1,6 @@
 require 'rake'
 require 'rake/testtask'
-require RAKEVERSION == '0.8.0' ? 'rake/gempackagetask' : 'rubygems/package_task'
+require 'rubygems/package_task'
 
 require 'date'
 require 'rbconfig'
@@ -273,23 +273,6 @@ task :generate_app_doc do
   system %{cd #{PKG_DESTINATION}; rake doc:app}
 end
 
-if RAKEVERSION == '0.8.0'
-  require 'rake/rdoctask'
-
-  Rake::RDocTask.new do |rdoc|
-    rdoc.rdoc_dir = 'doc'
-    rdoc.title    = "Railties -- Gluing the Engine to the Rails"
-    rdoc.options << '--line-numbers' << '--inline-source' << '--accessor' << 'cattr_accessor=object'
-    rdoc.options << '--charset' << 'utf-8'
-    rdoc.template = ENV['template'] ? "#{ENV['template']}.rb" : '../doc/template/horo'
-    rdoc.rdoc_files.include('README', 'CHANGELOG')
-    rdoc.rdoc_files.include('lib/*.rb')
-    rdoc.rdoc_files.include('lib/rails/*.rb')
-    rdoc.rdoc_files.include('lib/rails_generator/*.rb')
-    rdoc.rdoc_files.include('lib/commands/**/*.rb')
-  end
-end
-
 # Generate GEM ----------------------------------------------------------------------------
 
 task :copy_gem_environment do
@@ -337,7 +320,7 @@ spec = Gem::Specification.new do |s|
   s.homepage = "http://www.rubyonrails.org"
 end
 
-package_task = RAKEVERSION == '0.8.0' ? Rake::GemPackageTask : Gem::PackageTask
+package_task = Gem::PackageTask
 package_task.new(spec) do |pkg|
   pkg.gem_spec = spec
 end
