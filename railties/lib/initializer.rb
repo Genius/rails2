@@ -278,7 +278,7 @@ module Rails
       raise e.to_s
     end
 
-    # Require lts-version, so RailsLTS::VERSION is available.
+    # Require lts-version, so RailsLts::VERSION is available.
     # Needs to happen late, so load paths are properly set up when using frozen gems.
     def require_lts_version
       version_load_path = configuration.railslts_version_path
@@ -1034,7 +1034,7 @@ Run `rake gems:install` to install the missing gems.
         paths = []
 
         # Add the old mock paths only if the directories exists
-        paths.concat(Dir["#{root_path}/test/mocks/#{environment}"]) if File.exists?("#{root_path}/test/mocks/#{environment}")
+        paths.concat(Dir["#{root_path}/test/mocks/#{environment}"]) if File.exist?("#{root_path}/test/mocks/#{environment}")
 
         # Add the app's controller directory
         paths.concat(Dir["#{root_path}/app/controllers/"])
