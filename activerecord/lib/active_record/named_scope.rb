@@ -136,19 +136,19 @@ module ActiveRecord
         load_found; self
       end
 
-      def first(*args)
+      def first(*args, **kargs)
         if args.first.kind_of?(Integer) || (@found && !args.first.kind_of?(Hash))
-          proxy_found.first(*args)
+          proxy_found.first(*args, **kargs)
         else
-          find(:first, *args)
+          find(:first, *args, **kargs)
         end
       end
 
-      def last(*args)
+      def last(*args, **kargs)
         if args.first.kind_of?(Integer) || (@found && !args.first.kind_of?(Hash))
-          proxy_found.last(*args)
+          proxy_found.last(*args, **kargs)
         else
-          find(:last, *args)
+          find(:last, *args, **kargs)
         end
       end
 
@@ -178,18 +178,18 @@ module ActiveRecord
       end
 
       private
-      def method_missing(method, *args, &block)
+      def method_missing(method, *args, **kargs, &block)
         if scopes.include?(method)
-          scopes[method].call(self, *args)
+          scopes[method].call(self, *args, **kargs)
         else
           with_scope({:find => proxy_options, :create => proxy_options[:conditions].is_a?(Hash) ?  proxy_options[:conditions] : {}}, :reverse_merge) do
             method = :new if method == :build
             if current_scoped_methods_when_defined && !scoped_methods.include?(current_scoped_methods_when_defined)
               with_scope current_scoped_methods_when_defined do
-                proxy_scope.send(method, *args, &block)
+                proxy_scope.send(method, *args, **kargs, &block)
               end
             else
-              proxy_scope.send(method, *args, &block)
+              proxy_scope.send(method, *args, **kargs, &block)
             end
           end
         end

@@ -146,12 +146,12 @@ module ActiveRecord
         @target.inspect
       end
 
-      def send(method, *args)
+      def send(method, *args, **kargs)
         if proxy_respond_to?(method)
           super
         else
           load_target
-          @target.send(method, *args)
+          @target.send(method, *args, **kargs)
         end
       end
 
@@ -214,10 +214,10 @@ module ActiveRecord
 
       private
         # Forwards any missing method call to the \target.
-        def method_missing(method, *args, &block)
+        def method_missing(method, ...)
           if load_target
             if ActiveSupport.legacy_respond_to?(@target, method)
-              @target.send(method, *args, &block)
+              @target.send(method, ...)
             else
               super
             end
