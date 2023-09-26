@@ -137,15 +137,15 @@ module ActiveRecord
       end
 
       def first(*args, **kargs)
-        if args.first.kind_of?(Integer) || (@found && !args.first.kind_of?(Hash))
+        if args.first.kind_of?(Integer) || (@found && kargs.empty?)
           proxy_found.first(*args, **kargs)
         else
           find(:first, *args, **kargs)
         end
       end
-
+  
       def last(*args, **kargs)
-        if args.first.kind_of?(Integer) || (@found && !args.first.kind_of?(Hash))
+        if args.first.kind_of?(Integer) || (@found && kargs.empty?)
           proxy_found.last(*args, **kargs)
         else
           find(:last, *args, **kargs)
