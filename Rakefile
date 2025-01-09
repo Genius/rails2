@@ -1,12 +1,12 @@
 require 'rake'
 require 'rubygems/package_task'
-require File.expand_path('../railslts-version/lib/railslts-version', __FILE__)
+require File.expand_path('../railties/lib/railslts/version', __FILE__)
 require File.expand_path('../rack/lib/rack/version', __FILE__)
 
 GEM_SERVER = 'railslts-gems-admin.makandra.de'
 
 BRANCH = '2-3-lts'
-SUB_PROJECT_PATHS = %w(activesupport railties actionpack actionmailer activeresource activerecord railslts-version rack)
+SUB_PROJECT_PATHS = %w(activesupport railties actionpack actionmailer activeresource activerecord rack)
 ALL_PROJECT_PATHS = ['.', *SUB_PROJECT_PATHS]
 
 fail = lambda { |message|
@@ -87,9 +87,6 @@ namespace :railslts do
       runner.run('rack', 'cd rack && rake test')
 
       runner.run('railties', 'cd railties && rake test')
-
-      runner.run('railslts-version', 'cd railslts-version && rake test')
-
     end
   end
 
@@ -171,7 +168,7 @@ namespace :railslts do
 
     task :ensure_ready do
       jobs = [
-        "Did you update the version in railslts-version/lib/railslts-version.rb (currently #{RailsLts::VERSION::STRING}), if required?",
+        "Did you update the version in railties/lib/railslts/version.rb (currently #{RailsLts::VERSION::STRING}), if required?",
         "Did you update the version in rack/lib/version.rb (currently #{Rack::RELEASE}), if required?",
         'Did you update the LICENSE files using `rake railslts:update_license`?',
         'Did you commit and push your changes, as well as the changes by the Rake tasks mentioned above?',

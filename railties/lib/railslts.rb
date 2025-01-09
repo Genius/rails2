@@ -1,4 +1,19 @@
 module RailsLts
+  def self.release_name
+    "Rails #{VERSION::STRING} LTS"
+  end
+
+  def self.product_name
+    'Rails LTS'
+  end
+
+  def self.configuration_name
+    'rails_lts_options'.freeze
+  end
+
+  def self.configuration_link
+    'https://makandracards.com/railslts/16311-enabling-additional-security-features-rails-lts'.freeze
+  end
 
   class << self
     attr_accessor :configuration
@@ -18,6 +33,11 @@ module RailsLts
 
     def self.prepare(rails_lts_options)
       RailsLts.configuration = new(rails_lts_options)
+      after_prepare
+    end
+
+    def self.after_prepare
+      # hook for whitelabeling
     end
 
     def self.finalize
@@ -25,6 +45,7 @@ module RailsLts
     end
 
     def initialize(options)
+      @configured = !!options
       options ||= {}
 
       set_defaults(options.delete(:default) || :compatible)
@@ -35,6 +56,13 @@ module RailsLts
     end
 
     def finalize
+      unless @configured
+        message = %{Please configure your #{RailsLts.configuration_name} using config.#{RailsLts.configuration_name} in config/environment.rb. Defaulting to "#{RailsLts.configuration_name} = { :default => :compatible }.}
+        if RailsLts.configuration_link
+          message << " See #{RailsLts.configuration_link} for documentation."
+        end
+        $stderr.puts(message)
+      end
       finalize_param_parsers
       finalize_json_html_entity_escaping
     end
