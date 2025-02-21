@@ -51,11 +51,16 @@ describe Rack::CommonLogger do
     res.errors.should =~ /"GET \/ " 200 - /
   end
 
-  should "escape non printable characters except newline" do
+  should "escape non printable characters including newline" do
     log = StringIO.new
     Rack::MockRequest.new(Rack::CommonLogger.new(app_without_lint, log)).request("GET\b\x10", "/hello")
 
     log.string.should.match(/GET\\x08\\x10 \/hello/)
+
+    Rack::MockRequest.new(Rack::CommonLogger.new(app, log)).get("/", 'REMOTE_USER' => "foo\nbar", "QUERY_STRING" => "bar\nbaz")
+    log.string.should.match(/\n\z/)
+    log.string.should.match(/foo\\x0abar/)
+    log.string.should.match(/bar\\x0abaz/)
   end
 
   def length
