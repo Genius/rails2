@@ -36,7 +36,7 @@ module ActionController
       end
 
       def interpolation_chunk
-        URI.escape(value, UNSAFE_PCHAR)
+        URI.escape_unsafe_characters(value, UNSAFE_PCHAR)
       end
 
       # Return a string interpolation statement for this segment and those before it.
@@ -173,7 +173,7 @@ module ActionController
       end
 
       def interpolation_chunk(value_code = local_name)
-        "\#{URI.escape(#{value_code}.to_s, ActionController::Routing::Segment::UNSAFE_PCHAR)}"
+        "\#{URI.escape_unsafe_characters(#{value_code}.to_s, ActionController::Routing::Segment::UNSAFE_PCHAR)}"
       end
 
       def string_structure(prior_segments)
@@ -221,7 +221,7 @@ module ActionController
         default_value = default ? default.inspect : nil
         %[
           value = if (m = match[#{next_capture}])
-            URI.unescape(m)
+            URI.unescape_uri(m)
           else
             #{default_value}
           end
@@ -270,7 +270,7 @@ module ActionController
       end
 
       def extract_value
-        "#{local_name} = hash[:#{key}] && Array(hash[:#{key}]).collect { |path_component| URI.escape(path_component.to_param, ActionController::Routing::Segment::UNSAFE_PCHAR) }.to_param #{"|| #{default.inspect}" if default}"
+        "#{local_name} = hash[:#{key}] && Array(hash[:#{key}]).collect { |path_component| URI.escape_unsafe_characters(path_component.to_param, ActionController::Routing::Segment::UNSAFE_PCHAR) }.to_param #{"|| #{default.inspect}" if default}"
       end
 
       def default
@@ -300,7 +300,7 @@ module ActionController
       class Result < ::Array #:nodoc:
         def to_s() join '/' end
         def self.new_escaped(strings)
-          new strings.collect {|str| URI.unescape str}
+          new strings.collect {|str| URI.unescape_uri str}
         end
       end
     end
@@ -333,7 +333,7 @@ module ActionController
       def match_extraction(next_capture)
         %[
           if (m = match[#{next_capture}])
-            params[:#{key}] = URI.unescape(m.from(1))
+            params[:#{key}] = URI.unescape_uri(m.from(1))
           end
         ]
       end
