@@ -1,6 +1,0 @@
-#!/bin/sh
-
-rbenv local 2.3.8 &&
-  bundle install --gemfile Gemfile.2.3 &&
-  pushd actionpack &&
-  bundle exec --gemfile ../Gemfile.2.3 rake test ; popd
