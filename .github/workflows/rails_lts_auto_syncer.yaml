@@ -51,7 +51,7 @@ jobs:
 
       - name: Grab diff
         id: git-diff
-        run: git rev-list --pretty origin/hfsaito/test..origin/2-3-lts
+        run: git rev-list --pretty origin/hfsaito/test..origin/2-3-lts >> $GITHUB_OUTPUT
 
       - name: Create or grab existing pull request
         id: pr
@@ -122,7 +122,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "```\n${{ steps.diff.outputs.stdout }}\n```"
+                    "text": "```\n${{ steps.diff.outputs }}\n```"
                   }
                 }
               ]
