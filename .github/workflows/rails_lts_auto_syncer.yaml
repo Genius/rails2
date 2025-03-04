@@ -128,7 +128,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "```\n${{ steps.diff.outputs }}\n```"
+                    "text": "```\n${{ steps.diff.outputs.pretty_diff }}\n```"
                   }
                 }
               ]
