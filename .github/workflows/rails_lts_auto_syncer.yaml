@@ -20,11 +20,11 @@ jobs:
 
           n_releases=$(git rev-list --count origin/2-3-lts..makandra/2-3-lts -- railslts-version/lib/railslts-version.rb)
           if [[ $n_releases -eq 0 ]]; then
-            echo "cancel"
+            echo "cancel" >> $GITHUB_OUTPUT
           fi
 
       - name: Cancel workflow if there is no change
-        if: ${{ steps.check-changes.output.stdout == 'cancel' }}
+        if: ${{ steps.check-changes.outputs == 'cancel' }}
         uses: actions/github-script@v7
         with:
           script: |
