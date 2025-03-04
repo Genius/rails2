@@ -1,5 +1,0 @@
-#!/bin/sh
-
-rbenv local 2.3.8 &&
-  bundle install --gemfile Gemfile.2.3 &&
-  PG_HOST=127.0.0.1 PG_USER=postgres bundle exec --gemfile Gemfile.2.3 rake railslts:test
