@@ -121,7 +121,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "(Please review and deploy!)[${{ steps.pr.outputs.html_url }}]"
+                    "text": "(Please review and deploy!)[${{ steps.pr.outputs.result.html_url }}]"
                   }
                 },
                 {
