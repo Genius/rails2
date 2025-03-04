@@ -14,6 +14,7 @@ jobs:
         id: check-changes
         run: |
           git fetch origin hfsaito/test
+          git fetch origin 2-3-lts
           git remote add makandra https://github.com/makandra/rails.git
           git fetch makandra 2-3-lts
 
