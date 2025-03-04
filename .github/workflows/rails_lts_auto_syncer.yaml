@@ -1,8 +1,7 @@
 name: Merge Rails LTS branch
 on:
-  - pull_request
-  # schedule:
-  #   - cron: 0 0-23 * * *
+  schedule:
+    - cron: 0 0-23 * * *
 jobs:
   auto-update-fork:
     runs-on: ubuntu-latest
@@ -13,7 +12,7 @@ jobs:
       - name: Check changes in makandra/rails/2-3-lts
         id: check-changes
         run: |
-          git fetch origin hfsaito/test
+          git fetch origin 2-3-lts-for-genius
           git fetch origin 2-3-lts
           git remote add makandra https://github.com/makandra/rails.git
           git fetch makandra 2-3-lts
@@ -53,7 +52,7 @@ jobs:
       - name: Grab diff
         id: git-diff
         run: |
-          pretty_diff=$(git rev-list --pretty origin/hfsaito/test..origin/2-3-lts)
+          pretty_diff=$(git rev-list --pretty origin/2-3-lts-for-genius..origin/2-3-lts)
 
           echo "pretty_diff<<EOF" >> $GITHUB_OUTPUT
           echo "$pretty_diff" >> $GITHUB_OUTPUT
@@ -71,7 +70,7 @@ jobs:
               repo,
               state: 'open',
               head: '2-3-lts',
-              base: 'hfsaito/test',
+              base: '2-3-lts-for-genius',
             });
             const existingPr = resultPullsList.data[0];
             if (existingPr) {
@@ -83,7 +82,7 @@ jobs:
               repo,
               title: '[Automated workflow] New Rails LTS commits',
               head: '2-3-lts',
-              base: 'hfsaito/test',
+              base: '2-3-lts-for-genius',
               body: [
                 'This is an automated PR to keep track of Rails LTS changes',
                 '',
