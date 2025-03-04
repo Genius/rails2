@@ -103,7 +103,6 @@ jobs:
           channel-id: ${{ vars.SLACK_CHANNEL_ID }}
           payload: |
             {
-              "thread_ts": "${{ steps.slack-init.outputs.ts }}",
               "blocks": [
                 {
                   "type": "section",
@@ -116,14 +115,14 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "(Please review and deploy!)[${{ steps.pr.output.html_url }}]"
+                    "text": "(Please review and deploy!)[${{ steps.pr.outputs.html_url }}]"
                   }
                 },
                 {
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "```\n${{ steps.diff.output.stdout }}\n```"
+                    "text": "```\n${{ steps.diff.outputs.stdout }}\n```"
                   }
                 }
               ]
