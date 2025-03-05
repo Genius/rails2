@@ -115,11 +115,6 @@ jobs:
                   "New commits were merged in rails-lts!",
                   "Please review and deploy!",
                   fromJson(steps.pr.outputs.result).html_url,
-                  join([
-                    "[](",
-                    ,
-                    ")"
-                  ], ''),
                   "```",
                   steps.git-diff.outputs.pretty_diff,
                   "```"
