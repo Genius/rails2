@@ -65,44 +65,16 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const { repo, owner } = context.repo;
+            const script = require('${{ github.action_path }}/scripts/pr.js');
+            return script({github, context});
 
-            const resultPullsList = await github.rest.pulls.list({
-              owner,
-              repo,
-              state: 'open',
-              head: '2-3-lts',
-              base: '2-3-lts-for-genius',
-            });
-            const existingPr = resultPullsList.data[0];
-            if (existingPr) {
-              return existingPr;
-            }
-
-            const resultPullsCreate = await github.rest.pulls.create({
-              owner,
-              repo,
-              title: '[Automated workflow] New Rails LTS commits',
-              head: '2-3-lts',
-              base: '2-3-lts-for-genius',
-              body: [
-                'This is an automated PR to keep track of Rails LTS changes',
-                '',
-                'To resolve conflicts keep in mind following points:',
-                '- Keep using ** in keyword arguments instead of `ruby2_keywords`',
-                '- Keep rack < 2.0, allowing rack 1.6',
-                '- Make sure we won\'t use the deprecated `-i` option in `pg_dump`',
-              ].join('\n')
-            });
-            const newPr = resultPullsCreate.data;
-
-            github.rest.issues.addLabels({
-              owner,
-              repo,
-              issue_number: newPr.number,
-              labels: ['rails lts']
-            });
-            return newPr;
+      - name: Create slack messages
+        id: messages
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const script = require('${{ github.action_path }}/scripts/messages.js');
+            return script({github, context, steps: ${{ toJSON(steps) }} });
 
       - name: Notify slack
         uses: slackapi/slack-github-action@v1.24.0
@@ -110,37 +82,13 @@ jobs:
           channel-id: ${{ vars.SLACK_CHANNEL_ID }}
           payload: |
             {
-              "text": ${{
-                toJSON(format(
-                  "{0}\n{1}\n{2}\n{3}\n{4}\n{5}",
-                  "New commits were merged in rails-lts!",
-                  "Please review and deploy!",
-                  fromJson(steps.pr.outputs.result).html_url,
-                  "```",
-                  steps.git-diff.outputs.pretty_diff,
-                  "```"
-                ))
-              }},
+              "text": ${{ toJSON(steps.messages.outputs.text) }},
               "blocks": [
                 {
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": ${{
-                      toJSON(format(
-                        "{0}\n{1}\n{2}\n{3}",
-                        "**New commits were merged in rails-lts!**",
-                        format(
-                          "{0}{1}{2}",
-                          "[Please review and deploy!](",
-                          fromJson(steps.pr.outputs.result).html_url,
-                          ")"
-                        ),
-                        "```",
-                        steps.git-diff.outputs.pretty_diff,
-                        "```"
-                      ))
-                    }}
+                    "text": ${{ toJSON(steps.messages.outputs.markdown) }}
                   }
                 }
               ]
