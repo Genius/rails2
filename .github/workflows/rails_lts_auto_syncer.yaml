@@ -111,31 +111,36 @@ jobs:
           payload: |
             {
               "text": ${{
-                toJSON(join([
+                toJSON(format(
+                  "{0}\n{1}\n{2}\n{3}\n{4}\n{5}"
                   "New commits were merged in rails-lts!",
                   "Please review and deploy!",
                   fromJson(steps.pr.outputs.result).html_url,
                   "```",
                   steps.git-diff.outputs.pretty_diff,
                   "```"
-                ], '\n'))
+                ))
               }},
               "blocks": [
                 {
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": ${{ toJSON(join([
-                      "**New commits were merged in rails-lts!**",
-                      join([
-                        "[Please review and deploy!](",
-                        fromJson(steps.pr.outputs.result).html_url,
-                        ")"
-                      ], ''),
-                      "```",
-                      steps.git-diff.outputs.pretty_diff,
-                      "```"
-                    ], '\n')) }}
+                    "text": ${{
+                      toJSON(format(
+                        "{0}\n{1}\n{2}\n{3}",
+                        "**New commits were merged in rails-lts!**",
+                        format(
+                          "{0}{1}{2}",
+                          "[Please review and deploy!](",
+                          fromJson(steps.pr.outputs.result).html_url,
+                          ")"
+                        ),
+                        "```",
+                        steps.git-diff.outputs.pretty_diff,
+                        "```"
+                      ))
+                    }}
                   }
                 }
               ]
