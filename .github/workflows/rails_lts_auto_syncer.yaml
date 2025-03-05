@@ -57,7 +57,7 @@ jobs:
           pretty_diff=$(git rev-list --pretty origin/2-3-lts-for-genius..$last_release_commit)
 
           echo "pretty_diff<<EOF" >> $GITHUB_OUTPUT
-          echo "\`\`\`\n$pretty_diff\n\`\`\`" >> $GITHUB_OUTPUT
+          echo $pretty_diff >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Create or grab existing pull request
@@ -110,26 +110,37 @@ jobs:
           channel-id: ${{ vars.SLACK_CHANNEL_ID }}
           payload: |
             {
+              "text": ${{
+                toJSON(join([
+                  "New commits were merged in rails-lts!",
+                  "Please review and deploy!",
+                  fromJson(steps.pr.outputs.result).html_url,
+                  join([
+                    "[](",
+                    ,
+                    ")"
+                  ], ''),
+                  "```",
+                  steps.git-diff.outputs.pretty_diff,
+                  "```"
+                ], '\n'))
+              }},
               "blocks": [
                 {
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "**New commits were merged in rails-lts!**"
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": "[Please review and deploy!](${{ fromJson(steps.pr.outputs.result).html_url }})"
-                  }
-                },
-                {
-                  "type": "section",
-                  "text": {
-                    "type": "mrkdwn",
-                    "text": ${{ toJSON(steps.git-diff.outputs.pretty_diff) }}
+                    "text": ${{ toJSON(join([
+                      "**New commits were merged in rails-lts!**",
+                      join([
+                        "[Please review and deploy!](",
+                        fromJson(steps.pr.outputs.result).html_url,
+                        ")"
+                      ], ''),
+                      "```",
+                      steps.git-diff.outputs.pretty_diff,
+                      "```"
+                    ], '\n')) }}
                   }
                 }
               ]
