@@ -112,7 +112,7 @@ jobs:
             {
               "text": ${{
                 toJSON(format(
-                  "{0}\n{1}\n{2}\n{3}\n{4}\n{5}"
+                  "{0}\n{1}\n{2}\n{3}\n{4}\n{5}",
                   "New commits were merged in rails-lts!",
                   "Please review and deploy!",
                   fromJson(steps.pr.outputs.result).html_url,
