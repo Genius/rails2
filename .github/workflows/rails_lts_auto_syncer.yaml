@@ -53,7 +53,7 @@ jobs:
       - name: Grab diff
         id: git-diff
         run: |
-          pretty_diff=$(git rev-list --pretty origin/2-3-lts-for-genius..makandra/2-3-lts)
+          pretty_diff=$(git rev-list --pretty origin/2-3-lts-for-genius..makandra/2-3-lts -- railslts-version/lib/railslts-version.rb)
 
           echo "pretty_diff<<EOF" >> $GITHUB_OUTPUT
           echo "$pretty_diff" >> $GITHUB_OUTPUT
@@ -128,7 +128,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "```\n${{ steps.git-diff.outputs.pretty_diff }}\n```"
+                    "text": "```\n${{ toJSON(steps.git-diff.outputs.pretty_diff) }}\n```"
                   }
                 }
               ]
