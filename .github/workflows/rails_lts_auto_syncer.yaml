@@ -57,9 +57,7 @@ jobs:
           pretty_diff=$(git rev-list --pretty origin/2-3-lts-for-genius..$last_release_commit)
 
           echo "pretty_diff<<EOF" >> $GITHUB_OUTPUT
-          echo "```\n" >> $GITHUB_OUTPUT
-          echo "$pretty_diff" >> $GITHUB_OUTPUT
-          echo "\n```" >> $GITHUB_OUTPUT
+          echo "\`\`\`\n$pretty_diff\n\`\`\`" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Create or grab existing pull request
