@@ -10,8 +10,7 @@ module.exports = async ({github, context, core}) => {
   });
 
   const delay = ms => new Promise(res => setTimeout(res, ms));
-  while (true) {
-    core.info('Waiting for workflow to cancel...');
-    await delay(5000);
-  }
+  core.info('Waiting for workflow to cancel...');
+  await delay(5000);
+  throw "Timeout: Workflow was supposed to be cancelled"
 };
