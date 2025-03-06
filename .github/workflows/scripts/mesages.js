@@ -1,5 +1,4 @@
-module.exports = ({rawSteps}) => {
-  const steps = JSON.parse(rawSteps);
+module.exports = ({steps}) => {
   const output = {};
 
   output.text = [
