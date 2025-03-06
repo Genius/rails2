@@ -74,7 +74,10 @@ jobs:
         with:
           script: |
             const script = require('./.github/workflows/scripts/mesages.js');
-            return script({github, context, steps: ${{ toJSON(steps) }} });
+            return script({
+              prLink: ${{ toJSON(fromJSON(steps.pr.outputs.result).html_url) }},
+              diff: ${{ toJSON(steps.git-diff.outputs.pretty_diff) }}
+            });
 
       - name: Send slack messages
         uses: slackapi/slack-github-action@v1.24.0
