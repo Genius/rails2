@@ -118,7 +118,7 @@ module Rack
           body = []
         when '', nil
         else
-          env['rack.errors'].puts "Unknown x-sendfile variation: '#{variation}'.\n"
+          env['rack.errors'].puts "Unknown x-sendfile variation: #{type.inspect}"
         end
       end
       [status, headers, body]
