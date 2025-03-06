@@ -60,7 +60,7 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const script = require('./.github/workflows/scripts/mesages.js');
+            const script = require('./.github/workflows/scripts/messages.js');
             return script({
               prLink: ${{ toJSON(fromJSON(steps.pr.outputs.result).html_url) }},
               diff: ${{ toJSON(steps.git-diff.outputs.pretty_diff) }}
