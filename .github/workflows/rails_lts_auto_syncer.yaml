@@ -65,7 +65,7 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const script = require('./.github/workflow/scripts/pr.js');
+            const script = require('./.github/workflows/scripts/pr.js');
             return script({github, context});
 
       - name: Create slack messages
@@ -73,7 +73,7 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            const script = require('./.github/workflow/scripts/messages.js');
+            const script = require('./.github/workflows/scripts/mesages.js');
             return script({github, context, steps: ${{ toJSON(steps) }} });
 
       - name: Notify slack
