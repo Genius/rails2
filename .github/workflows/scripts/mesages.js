@@ -11,7 +11,7 @@ module.exports = ({steps}) => {
     "**New commits were merged in rails-lts!**",
     `[Please review and deploy!](${steps.pr.outputs.result.html_url})`,
     "```",
-    steps.git-diff.outputs.pretty_diff,
+    steps['git-diff'].outputs.pretty_diff,
     "```"
   ].join('\n');
 
