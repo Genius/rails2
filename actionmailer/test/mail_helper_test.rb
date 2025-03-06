@@ -91,5 +91,36 @@ class MailerHelperTest < Test::Unit::TestCase
     assert_match %r{  But soft!}, mail.encoded
     assert_match %r{east, and\n  Juliet}, mail.encoded
   end
+
+  def helper
+    Object.new.extend(MailHelper)
+  end
+
+  def test_block_format
+    assert_equal "  * foo\n", helper.block_format(" * foo")
+    assert_equal "  * foo\n", helper.block_format("   * foo")
+    assert_equal "  * foo\n", helper.block_format("* foo")
+    assert_equal "  * foo\n*bar\n", helper.block_format("* foo*bar")
+    assert_equal "  * foo\n  * bar\n", helper.block_format("* foo * bar")
+    assert_equal "  *\n", helper.block_format("* ")
+  end
+
+  # Test case for CVE-2024-47889
+  def test_block_format_asterisk
+    assert_nothing_raised do
+      Timeout.timeout(0.1) do
+        helper.block_format('  ' + '*' * 50_000)
+      end
+    end
+  end
+
+  # Test case for CVE-2024-47889
+  def test_block_format_hashtag
+    assert_nothing_raised do
+      Timeout.timeout(0.1) do
+        helper.block_format('  ' + '#' * 50_000)
+      end
+    end
+  end
 end
 
