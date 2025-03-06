@@ -1,4 +1,4 @@
-module.exports = async ({github, core}) => {
+module.exports = async ({github, context, core}) => {
   core.info('Branches compared Genius/rails2/2-3-lts and makandra/rails/2-3-lts');
   core.info('No changes detected in railslts-version/lib/railslts-version.rb');
   core.info('Canceling workflow');

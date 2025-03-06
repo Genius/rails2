@@ -29,7 +29,7 @@ jobs:
         with:
           script: |
             const script = require('./.github/workflows/scripts/cancel.js');
-            return script({github, core});
+            return script({github, context, core});
 
       - name: Update our copy of rails lts branch to the latest release
         run: |
