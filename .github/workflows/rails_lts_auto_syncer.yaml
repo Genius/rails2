@@ -57,7 +57,7 @@ jobs:
           pretty_diff=$(git rev-list --pretty origin/2-3-lts-for-genius..$last_release_commit)
 
           echo "pretty_diff<<EOF" >> $GITHUB_OUTPUT
-          echo $pretty_diff >> $GITHUB_OUTPUT
+          echo "$pretty_diff" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Create or grab existing pull request
@@ -76,7 +76,7 @@ jobs:
             const script = require('./.github/workflows/scripts/mesages.js');
             return script({
               prLink: ${{ toJSON(fromJSON(steps.pr.outputs.result).html_url) }},
-              diff: `${{ steps.git-diff.outputs.pretty_diff }}`;
+              diff: ${{ toJSON(steps.git-diff.outputs.pretty_diff) }};
             });
 
       - name: Send slack messages
