@@ -68,7 +68,7 @@ jobs:
             const script = require('./.github/workflows/scripts/pr.js');
             return script({github, context});
 
-      - name: Create slack messages
+      - name: Build slack messages
         id: messages
         uses: actions/github-script@v7
         with:
@@ -76,19 +76,19 @@ jobs:
             const script = require('./.github/workflows/scripts/mesages.js');
             return script({github, context, steps: ${{ toJSON(steps) }} });
 
-      - name: Notify slack
+      - name: Send slack messages
         uses: slackapi/slack-github-action@v1.24.0
         with:
           channel-id: ${{ vars.SLACK_CHANNEL_ID }}
           payload: |
             {
-              "text": ${{ toJSON(steps.messages.outputs.text) }},
+              "text": ${{ toJSON(fromJSON(steps.messages.outputs.result).text) }},
               "blocks": [
                 {
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": ${{ toJSON(steps.messages.outputs.markdown) }}
+                    "text": ${{ toJSON(fromJSON(steps.messages.outputs.result).markdown) }}
                   }
                 }
               ]

@@ -1,13 +1,13 @@
 module.exports = ({steps}) => {
-  const output = {};
+  const outputs = {};
 
-  output.text = [
+  outputs.text = [
     "New commits were merged in rails-lts!",
     "Please review and deploy!",
     steps.pr.outputs.result.html_url
   ].join('\n');
 
-  output.markdown = [
+  outputs.markdown = [
     "**New commits were merged in rails-lts!**",
     `[Please review and deploy!](${steps.pr.outputs.result.html_url})`,
     "```",
@@ -15,5 +15,5 @@ module.exports = ({steps}) => {
     "```"
   ].join('\n');
 
-  return output;
+  return outputs;
 };
