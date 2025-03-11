@@ -41,7 +41,7 @@ jobs:
       - name: Grab diff
         id: git-diff
         run: |
-          pretty_diff=$(git rev-list --pretty origin/2-3-lts-for-genius..origin/2-3-lts)
+          pretty_diff=$(git log --pretty=format:"- %s" origin/2-3-lts-for-genius..origin/2-3-lts)
 
           echo "pretty_diff<<EOF" >> $GITHUB_OUTPUT
           echo "$pretty_diff" >> $GITHUB_OUTPUT
