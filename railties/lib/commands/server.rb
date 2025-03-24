@@ -100,7 +100,7 @@ app = Rack::Builder.new {
   use Rails::Rack::LogTailer unless options[:detach]
   use Rails::Rack::Debugger if options[:debugger]
   map map_path do
-    use Rails::Rack::Static 
+    use Rails::Rack::Static
     run inner_app
   end
 }.to_app
@@ -118,7 +118,7 @@ end
 puts "=> Ctrl-C to shutdown server"
 
 begin
-  server.run(app, options.merge(:AccessLog => []))
+  server.run(app, **options.merge(:AccessLog => []))
 ensure
   puts 'Exiting'
 end
