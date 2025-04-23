@@ -421,11 +421,11 @@ module ActionMailer #:nodoc:
         matches_dynamic_method?(method_symbol) || super
       end
 
-      def method_missing(method_symbol, ...) #:nodoc:
+      def method_missing(method_symbol, *args, **kwargs) #:nodoc:
         if match = matches_dynamic_method?(method_symbol)
           case match[1]
-            when 'create'  then new(match[2], ...).mail
-            when 'deliver' then new(match[2], ...).deliver!
+            when 'create'  then new(match[2], *args, **kwargs).mail
+            when 'deliver' then new(match[2], *args, **kwargs).deliver!
             when 'new'     then nil
             else super
           end
@@ -481,15 +481,15 @@ module ActionMailer #:nodoc:
     # will be initialized according to the named method. If not, the mailer will
     # remain uninitialized (useful when you only need to invoke the "receive"
     # method, for instance).
-    def initialize(method_name=nil, ...) #:nodoc:
-      create!(method_name, ...) if method_name
+    def initialize(method_name=nil, *args, **kwargs) #:nodoc:
+      create!(method_name, *args, **kwargs) if method_name
     end
 
     # Initialize the mailer via the given +method_name+. The body will be
     # rendered and a new TMail::Mail object created.
-    def create!(method_name, ...) #:nodoc:
+    def create!(method_name, *args, **kwargs) #:nodoc:
       initialize_defaults(method_name)
-      __send__(method_name, ...)
+      __send__(method_name, *args, **kwargs)
 
       # If an explicit, textual body has not been set, we check assumptions.
       unless String === @body
