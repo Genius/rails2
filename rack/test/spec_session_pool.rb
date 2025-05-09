@@ -206,4 +206,59 @@ describe Rack::Session::Pool do
     res = Rack::MockRequest.new(app).get("/")
     res["Set-Cookie"].should.be.nil
   end
+
+  user_id_session = Rack::Lint.new(lambda do |env|
+    session = env["rack.session"]
+
+    case env["PATH_INFO"]
+    when "/login"
+      session[:user_id] = 1
+    when "/logout"
+      if session[:user_id].nil?
+        raise "User not logged in"
+      end
+
+      session.delete(:user_id)
+      env['rack.session.options'][:renew] = true
+    when "/slow"
+      session[:user_id]
+      @ready_queue.push(:ready)
+      @pause_queue.pop
+    end
+
+    Rack::Response.new(session.to_hash.inspect).to_a
+  end)
+
+  it "doesn't allow session id to be reused" do
+    app = Rack::Session::Pool.new(user_id_session)
+    @ready_queue = Queue.new
+    @pause_queue = Queue.new
+
+    login_response = Rack::MockRequest.new(app).get("/login")
+    login_cookie = login_response["Set-Cookie"]
+
+    slow_request_thread = Thread.new do
+      Rack::MockRequest.new(app).get("/slow", "HTTP_COOKIE" => login_cookie)
+    end
+
+    @ready_queue.pop
+    # Request is now idling in '/slow'
+
+    # Check that the session is valid:
+    response = Rack::MockRequest.new(app).get("/", "HTTP_COOKIE" => login_cookie)
+    response.body.should.equal({"user_id" => 1}.inspect)
+
+    logout_response = Rack::MockRequest.new(app).get("/logout", "HTTP_COOKIE" => login_cookie)
+    logout_cookie = logout_response["Set-Cookie"]
+
+    # Check that the session id is different after logout:
+    login_cookie[session_match].should.not.equal logout_cookie[session_match]
+
+    @pause_queue.push(:continue)
+    slow_response = slow_request_thread.value
+
+    # Check that the cookie can't be reused:
+    response = Rack::MockRequest.new(app).get("/", "HTTP_COOKIE" => login_cookie)
+    response.body.should.equal "{}"
+  end
 end
