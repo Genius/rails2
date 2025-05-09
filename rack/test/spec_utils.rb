@@ -383,6 +383,28 @@ describe Rack::Utils do
   should "clean slash only paths" do
     Rack::Utils.clean_path_info("/").should.equal "/"
   end
+
+  should "respect bytesize_limit to specify maximum size of query string to parse" do
+    Rack::Utils.bytesize_limit = 3
+    Rack::Utils.parse_query("a=a").should.equal({"a" => "a"})
+    Rack::Utils.parse_nested_query("a=a").should.equal({"a" => "a"})
+    Rack::Utils.parse_nested_query("a=a", '&').should.equal({"a" => "a"})
+    proc { Rack::Utils.parse_query("a=aa") }.should.raise(Rack::Utils::QueryLimitError)
+    proc { Rack::Utils.parse_nested_query("a=aa") }.should.raise(Rack::Utils::QueryLimitError)
+    proc { Rack::Utils.parse_nested_query("a=aa", '&') }.should.raise(Rack::Utils::QueryLimitError)
+    Rack::Utils.bytesize_limit = 4194304
+  end
+
+  it "accepts params_limit to specify maximum number of query parameters to parse" do
+    Rack::Utils.params_limit = 2
+    Rack::Utils.parse_query("a=a&b=b").should.equal({"a" => "a", "b" => "b"})
+    Rack::Utils.parse_nested_query("a=a&b=b").should.equal({"a" => "a", "b" => "b"})
+    Rack::Utils.parse_nested_query("a=a&b=b", '&').should.equal({"a" => "a", "b" => "b"})
+    proc { Rack::Utils.parse_query("a=a&b=b&c=c") }.should.raise(Rack::Utils::QueryLimitError)
+    proc { Rack::Utils.parse_nested_query("a=a&b=b&c=c", '&') }.should.raise(Rack::Utils::QueryLimitError)
+    proc { Rack::Utils.parse_query("b[]=a&b[]=b&b[]=c") }.should.raise(Rack::Utils::QueryLimitError)
+    Rack::Utils.params_limit = 4096
+  end
 end
 
 describe Rack::Utils, "byte_range" do
