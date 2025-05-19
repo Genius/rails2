@@ -6,7 +6,7 @@ require 'rubygems/package_task'
 
 require File.join(File.dirname(__FILE__), 'lib', 'active_record', 'version')
 require File.expand_path(File.dirname(__FILE__)) + "/test/config"
-require File.expand_path('../../railslts-version/lib/railslts-version', __FILE__)
+require File.expand_path('../../railties/lib/railslts/version', __FILE__)
 
 PKG_BUILD     = ENV['PKG_BUILD'] ? '.' + ENV['PKG_BUILD'] : ''
 PKG_NAME      = 'activerecord'

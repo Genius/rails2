@@ -40,6 +40,30 @@ describe Rack::Sendfile do
     end
   end
 
+  it "does nothing and logs to rack.errors when incorrect X-Sendfile-Type header present" do
+    io = StringIO.new
+    request 'HTTP_X_SENDFILE_TYPE' => 'X-Banana', 'rack.errors' => io do |response|
+      response.should.be.ok
+      response.body.should.equal 'Hello World'
+      response.headers.should.not.include 'X-Sendfile'
+
+      io.rewind
+      io.read.should.equal "Unknown x-sendfile variation: \"X-Banana\"\n"
+    end
+  end
+
+  it "does not send multi-line headers for invalid multi-line X-Sendfile-Type values" do
+    io = StringIO.new
+    request 'HTTP_X_SENDFILE_TYPE' => "Hello\nCVE-2025-27111", 'rack.errors' => io do |response|
+      response.should.be.ok
+      response.body.should.equal 'Hello World'
+      response.headers.should.not.include 'X-Sendfile'
+
+      io.rewind
+      io.read.should.equal "Unknown x-sendfile variation: \"Hello\\nCVE-2025-27111\"\n"
+    end
+  end
+
   it "sets X-Sendfile response header and discards body" do
     request 'HTTP_X_SENDFILE_TYPE' => 'X-Sendfile' do |response|
       response.should.be.ok

@@ -1,4 +1,4 @@
-require File.expand_path('../railslts-version/lib/railslts-version', __FILE__)
+require File.expand_path('../railties/lib/railslts/version', __FILE__)
 
 Gem::Specification.new do |s|
   s.name = 'rails'
@@ -18,5 +18,5 @@ Gem::Specification.new do |s|
   s.add_dependency 'actionmailer',     "= #{RailsLts::VERSION::STRING}"
   s.add_dependency 'activeresource',   "= #{RailsLts::VERSION::STRING}"
   s.add_dependency 'railties',         "= #{RailsLts::VERSION::STRING}"
-  s.add_dependency 'railslts-version', "= #{RailsLts::VERSION::STRING}"
+  # we do not depend on railslts-version anymore; the dependency has been reversed
 end

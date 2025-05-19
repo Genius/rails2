@@ -1,4 +1,4 @@
-require File.expand_path('../../railslts-version/lib/railslts-version', __FILE__)
+require File.expand_path('../../railties/lib/railslts/version', __FILE__)
 
 Gem::Specification.new do |s|
   s.name = 'activerecord'

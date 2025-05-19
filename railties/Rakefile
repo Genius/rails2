@@ -6,7 +6,7 @@ require 'date'
 require 'rbconfig'
 
 require File.join(File.dirname(__FILE__), 'lib/rails', 'version')
-require File.expand_path('../../railslts-version/lib/railslts-version', __FILE__)
+require File.expand_path('../../railties/lib/railslts/version', __FILE__)
 
 PKG_BUILD       = ENV['PKG_BUILD'] ? '.' + ENV['PKG_BUILD'] : ''
 PKG_NAME        = 'rails'

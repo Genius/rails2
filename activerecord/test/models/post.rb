@@ -1,7 +1,7 @@
 class Post < ActiveRecord::Base
   named_scope :with_type_self, lambda{{:conditions => ["type=?", self.name]}}
   named_scope :containing_the_letter_a, :conditions => "body LIKE '%a%'"
-  named_scope :ranked_by_comments, :order => "comments_count DESC"
+  named_scope :ranked_by_comments, :order => "comments_count DESC, id DESC"
   named_scope :limit, lambda {|limit| {:limit => limit} }
   named_scope :with_authors_at_address, lambda { |address| {
       :conditions => [ 'authors.author_address_id = ?', address.id ],
