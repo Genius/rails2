@@ -374,15 +374,15 @@ module ActiveRecord
           target
         end
         
-        def method_missing(method, *args, &block)
+        def method_missing(method, *args, **kargs, &block)
           case method.to_s
           when 'find_or_create'
             return find(:first, :conditions => args.first) || create(args.first)
           when /^find_or_create_by_(.*)$/
             rest = $1
-            find_args = pull_finder_args_from(DynamicFinderMatch.match(method).attribute_names, *args)
+            find_args = pull_finder_args_from(DynamicFinderMatch.match(method).attribute_names, *args, **kargs)
             return  send("find_by_#{rest}", *find_args) ||
-                    method_missing("create_by_#{rest}", *args, &block)
+                    method_missing("create_by_#{rest}", *args, **kargs, &block)
           when /^create_by_(.*)$/
             return create($1.split('_and_').zip(args).inject({}) { |h,kv| k,v=kv ; h[k] = v ; h }, &block)
           end
@@ -394,13 +394,13 @@ module ActiveRecord
               super
             end
           elsif @reflection.klass.scopes.include?(method)
-            @reflection.klass.scopes[method].call(self, *args)
+            @reflection.klass.scopes[method].call(self, *args, **kargs)
           else          
             with_scope(construct_scope) do
               if block_given?
-                @reflection.klass.send(method, *args) { |*block_args| yield(*block_args) }
+                @reflection.klass.send(method, *args, **kargs) { |*block_args| yield(*block_args) }
               else
-                @reflection.klass.send(method, *args)
+                @reflection.klass.send(method, *args, **kargs)
               end
             end
           end

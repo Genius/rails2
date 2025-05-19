@@ -63,7 +63,7 @@ spec = Gem::Specification.new do |s|
   s.requirements << 'none'
 
   s.add_dependency('activesupport', "= #{PKG_VERSION}")
-  s.add_dependency('rack', '< 1.5')
+  s.add_dependency('rack', '< 2.0')
 
   s.require_path = 'lib'
   s.autorequire = 'action_controller'
@@ -73,7 +73,7 @@ spec = Gem::Specification.new do |s|
     s.files = s.files + Dir.glob( "#{dir}/**/*" ).delete_if { |item| item.include?( "\.svn" ) }
   end
 end
-  
+
 package_task = Gem::PackageTask
 package_task.new(spec) do |p|
   p.gem_spec = spec
@@ -95,10 +95,10 @@ task :lines do
       codelines += 1
     end
     puts "L: #{sprintf("%4d", lines)}, LOC #{sprintf("%4d", codelines)} | #{file_name}"
-    
+
     total_lines     += lines
     total_codelines += codelines
-    
+
     lines, codelines = 0, 0
   end
 

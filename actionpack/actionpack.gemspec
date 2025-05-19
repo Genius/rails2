@@ -13,5 +13,5 @@ Gem::Specification.new do |s|
   s.require_path = 'lib'
 
   s.add_dependency 'activesupport', "= #{RailsLts::VERSION::STRING}"
-  s.add_dependency 'rack', '< 1.5'
+  s.add_dependency 'rack', '< 2.0'
 end

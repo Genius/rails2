@@ -34,7 +34,7 @@ class Module
   #   class Foo
   #     CONSTANT_ARRAY = [0,1,2,3]
   #     @@class_array  = [4,5,6,7]
-  #     
+  #
   #     def initialize
   #       @instance_array = [8,9,10,11]
   #     end
@@ -96,9 +96,8 @@ class Module
   #
   #  Foo.new.zoo   # returns nil
   #
-  def delegate(*methods)
-    options = methods.pop
-    unless options.is_a?(Hash) && to = options[:to]
+  def delegate(*methods, **options)
+    unless to = options[:to]
       raise ArgumentError, "Delegation needs a target. Supply an options hash with a :to key as the last argument (e.g. delegate :hello, :to => :greeter)."
     end
 
@@ -122,8 +121,8 @@ class Module
         end
 
       module_eval(<<-EOS, file, line)
-        #{ruby2_kw} def #{prefix}#{method}(*args, &block)   # (ruby2_keywords) def customer_name(*args, &block)
-          #{to}.__send__(#{method.inspect}, *args, &block)  #   client.__send__(:name, *args, &block)
+        def #{prefix}#{method}(...)               # def customer_name(...)
+          #{to}.__send__(#{method.inspect}, ...)  #   client.__send__(:name, ...)
         rescue NoMethodError                                # rescue NoMethodError
           if #{to}.nil?                                     #   if client.nil?
             #{on_nil}
