@@ -117,7 +117,7 @@ module Rack
             @buf.slice!(0, 2)          # Second \r\n
 
             content_type = head[MULTIPART_CONTENT_TYPE, 1]
-            name = head[MULTIPART_CONTENT_DISPOSITION, 1] || head[MULTIPART_CONTENT_ID, 1]
+            name = get_name(head)
 
             filename = get_filename(head)
 
@@ -143,6 +143,13 @@ module Rack
         end
 
         [head, filename, content_type, name, body]
+      end
+
+      def get_name(head)
+        name = if (disposition_value = head[MULTIPART_CONTENT_DISPOSITION, 1])
+          disposition_value[MULTIPART_CONTENT_DISPOSITION_NAME, 1]
+        end
+        name || head[MULTIPART_CONTENT_ID, 1]
       end
 
       def get_filename(head)
