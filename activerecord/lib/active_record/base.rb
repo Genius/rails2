@@ -392,7 +392,7 @@ module ActiveRecord #:nodoc:
   # So it's possible to assign a logger to the class through <tt>Base.logger=</tt> which will then be used by all
   # instances in the current object space.
   class Base
-    ##  
+    ##
     # :singleton-method:
     # Accepts a logger conforming to the interface of Log4r or the default Ruby 1.8+ Logger class, which is then passed
     # on to any new database connections made and which can be retrieved on both a class and instance level by calling +logger+.
@@ -426,11 +426,11 @@ module ActiveRecord #:nodoc:
     # as a Hash.
     #
     # For example, the following database.yml...
-    # 
+    #
     #   development:
     #     adapter: sqlite3
     #     database: db/development.sqlite3
-    #   
+    #
     #   production:
     #     adapter: sqlite3
     #     database: db/production.sqlite3
@@ -1411,7 +1411,7 @@ module ActiveRecord #:nodoc:
       def self_and_descendants_from_active_record#nodoc:
         klass = self
         classes = [klass]
-        while klass != klass.base_class  
+        while klass != klass.base_class
           classes << klass = klass.superclass
         end
         classes
@@ -1652,7 +1652,7 @@ module ActiveRecord #:nodoc:
           if result = find_every(options).first
             result
           else
-            raise RecordNotFound, "Couldn't find #{name} with ID=#{id}#{conditions}"
+            raise RecordNotFound, "Couldn't find #{name} with ID=#{id.inspect}#{conditions}"
           end
         end
 
@@ -1679,7 +1679,7 @@ module ActiveRecord #:nodoc:
           if result.size == expected_size
             result
           else
-            raise RecordNotFound, "Couldn't find all #{name.pluralize} with IDs (#{ids_list})#{conditions} (found #{result.size} results, but was looking for #{expected_size})"
+            raise RecordNotFound, "Couldn't find all #{name.pluralize} with IDs (#{ids_list.inspect})#{conditions} (found #{result.size} results, but was looking for #{expected_size})"
           end
         end
 
@@ -2027,7 +2027,7 @@ module ActiveRecord #:nodoc:
                   attributes = construct_attributes_from_arguments( #   attributes = construct_attributes_from_arguments(
                     [:#{attribute_names.join(',:')}], args          #     [:user_name, :password], args
                   )                                                 #   )
-                                                                    # 
+                                                                    #
                   scoped(:conditions => attributes)                 #   scoped(:conditions => attributes)
                 end                                                 # end
               EOS
@@ -2582,7 +2582,7 @@ module ActiveRecord #:nodoc:
       #       name
       #     end
       #   end
-      #   
+      #
       #   user = User.find_by_name('Phusion')
       #   user_path(user)  # => "/users/Phusion"
       def to_param
@@ -2637,12 +2637,12 @@ module ActiveRecord #:nodoc:
       # If +perform_validation+ is true validations run. If any of them fail
       # the action is cancelled and +save+ returns +false+. If the flag is
       # false validations are bypassed altogether. See
-      # ActiveRecord::Validations for more information. 
+      # ActiveRecord::Validations for more information.
       #
       # There's a series of callbacks associated with +save+. If any of the
       # <tt>before_*</tt> callbacks return +false+ the action is cancelled and
       # +save+ returns +false+. See ActiveRecord::Callbacks for further
-      # details. 
+      # details.
       def save
         create_or_update
       end
@@ -2654,12 +2654,12 @@ module ActiveRecord #:nodoc:
       #
       # With <tt>save!</tt> validations always run. If any of them fail
       # ActiveRecord::RecordInvalid gets raised. See ActiveRecord::Validations
-      # for more information. 
+      # for more information.
       #
       # There's a series of callbacks associated with <tt>save!</tt>. If any of
       # the <tt>before_*</tt> callbacks return +false+ the action is cancelled
       # and <tt>save!</tt> raises ActiveRecord::RecordNotSaved. See
-      # ActiveRecord::Callbacks for further details. 
+      # ActiveRecord::Callbacks for further details.
       def save!
         create_or_update || raise(RecordNotSaved)
       end
@@ -2840,12 +2840,12 @@ module ActiveRecord #:nodoc:
       #   class User < ActiveRecord::Base
       #     attr_protected :is_admin
       #   end
-      #   
+      #
       #   user = User.new
       #   user.attributes = { :username => 'Phusion', :is_admin => true }
       #   user.username   # => "Phusion"
       #   user.is_admin?  # => false
-      #   
+      #
       #   user.send(:attributes=, { :username => 'Phusion', :is_admin => true }, false)
       #   user.is_admin?  # => true
       def attributes=(new_attributes, guard_protected_attributes = true)
@@ -2980,7 +2980,7 @@ module ActiveRecord #:nodoc:
 
       def assign_attributes(attributes={})
         multiparameter_attributes = []
-        
+
         attributes.each do |k, v|
           if k.to_s.include?("(")
             multiparameter_attributes << [ k, v ]
@@ -2990,9 +2990,9 @@ module ActiveRecord #:nodoc:
           end
         end
 
-        assign_multiparameter_attributes(multiparameter_attributes) unless  multiparameter_attributes.empty?        
+        assign_multiparameter_attributes(multiparameter_attributes) unless  multiparameter_attributes.empty?
       end
-    
+
       def create_or_update
         raise ReadOnlyRecord if readonly?
         result = new_record? ? create : update
