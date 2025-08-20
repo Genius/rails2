@@ -649,7 +649,7 @@ Run `rake gems:install` to install the missing gems.
     end
 
     def configure_rails_lts
-      RailsLts::Configuration.prepare(Rails.configuration.rails_lts_options)
+      RailsLts::Configuration.prepare(Rails.configuration.send(RailsLts.configuration_name))
     end
 
     def finalize_rails_lts
@@ -878,7 +878,7 @@ Run `rake gems:install` to install the missing gems.
     attr_accessor :i18n
 
     # Accessor for rails-lts opt-in options
-    attr_accessor :rails_lts_options
+    attr_accessor RailsLts.configuration_name.to_sym
 
 
     # Create a new Configuration instance, initialized with the default
