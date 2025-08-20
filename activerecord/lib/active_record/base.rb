@@ -1652,13 +1652,13 @@ module ActiveRecord #:nodoc:
           if result = find_every(options).first
             result
           else
-            raise RecordNotFound, "Couldn't find #{name} with ID=#{id}#{conditions}"
+            raise RecordNotFound, "Couldn't find #{name} with ID=#{id.inspect}#{conditions}"
           end
         end
 
         def find_some(ids, options)
           conditions = " AND (#{sanitize_sql(options[:conditions])})" if options[:conditions]
-          ids_list   = ids.map { |id| quote_value(id,columns_hash[primary_key]) }.join(',')
+          ids_list   = ids.map { |id| quote_value(id.inspect,columns_hash[primary_key]) }.join(',')
           options.update :conditions => "#{quoted_table_name}.#{connection.quote_column_name(primary_key)} IN (#{ids_list})#{conditions}"
 
           result = find_every(options)
