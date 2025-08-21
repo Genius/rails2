@@ -1652,7 +1652,7 @@ module ActiveRecord #:nodoc:
           if result = find_every(options).first
             result
           else
-            raise RecordNotFound, "Couldn't find #{name} with ID=#{id}#{conditions}"
+            raise RecordNotFound, "Couldn't find #{name} with ID=#{id.inspect}#{conditions}"
           end
         end
 
