@@ -1,32 +1,32 @@
 PATH
   remote: .
   specs:
-    actionmailer (2.3.18.59)
-      actionpack (= 2.3.18.59)
-    actionpack (2.3.18.59)
-      activesupport (= 2.3.18.59)
+    actionmailer (2.3.18.60)
+      actionpack (= 2.3.18.60)
+    actionpack (2.3.18.60)
+      activesupport (= 2.3.18.60)
       rack (< 1.5)
-    activerecord (2.3.18.59)
-      activesupport (= 2.3.18.59)
-    activeresource (2.3.18.59)
-      activesupport (= 2.3.18.59)
-    activesupport (2.3.18.59)
-    rails (2.3.18.59)
-      actionmailer (= 2.3.18.59)
-      actionpack (= 2.3.18.59)
-      activerecord (= 2.3.18.59)
-      activeresource (= 2.3.18.59)
-      activesupport (= 2.3.18.59)
-      railties (= 2.3.18.59)
-    railties (2.3.18.59)
-      actionpack (= 2.3.18.59)
-      activesupport (= 2.3.18.59)
+    activerecord (2.3.18.60)
+      activesupport (= 2.3.18.60)
+    activeresource (2.3.18.60)
+      activesupport (= 2.3.18.60)
+    activesupport (2.3.18.60)
+    rails (2.3.18.60)
+      actionmailer (= 2.3.18.60)
+      actionpack (= 2.3.18.60)
+      activerecord (= 2.3.18.60)
+      activeresource (= 2.3.18.60)
+      activesupport (= 2.3.18.60)
+      railties (= 2.3.18.60)
+    railties (2.3.18.60)
+      actionpack (= 2.3.18.60)
+      activesupport (= 2.3.18.60)
       rake (>= 0.8.3)
 
 PATH
   remote: rack
   specs:
-    rack (1.4.7.21)
+    rack (1.4.7.24)
 
 GEM
   remote: https://rubygems.org/

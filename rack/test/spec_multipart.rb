@@ -174,6 +174,13 @@ describe Rack::Multipart do
     params.keys.should.not.include "files"
   end
 
+  should "use Content-ID header for the name, if no name is given" do
+    env = Rack::MockRequest.env_for("/", multipart_fixture(:content_id))
+    params = Rack::Multipart.parse_multipart(env)
+    params["name-via-content-id"].should.equal "Larry"
+    params["name-via-disposition"].should.equal "Berry"
+  end
+
   should "parse multipart/mixed" do
     env = Rack::MockRequest.env_for("/", multipart_fixture(:mixed_files))
     params = Rack::Utils::Multipart.parse_multipart(env)

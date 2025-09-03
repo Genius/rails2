@@ -53,6 +53,7 @@ module Rack
 
       def set_session(env, session_id, new_session, options)
         with_lock(env, false) do
+          return false unless @pool.key?(session_id)
           @pool.store session_id, new_session
           session_id
         end
@@ -61,7 +62,11 @@ module Rack
       def destroy_session(env, session_id, options)
         with_lock(env) do
           @pool.delete(session_id)
-          generate_sid unless options[:drop]
+          unless options[:drop]
+            sid = generate_sid
+            @pool.store sid, {}
+            sid
+          end
         end
       end
 

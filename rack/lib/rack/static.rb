@@ -109,8 +109,9 @@ module Rack
 
     def call(env)
       path = env["PATH_INFO"]
+      actual_path = Utils.clean_path_info(Utils.unescape(path))
 
-      if can_serve(path)
+      if can_serve(actual_path)
         env["PATH_INFO"] = (path =~ /\/$/ ? path + @index : @urls[path]) if overwrite_file_path(path)
         @path = env["PATH_INFO"]
         apply_header_rules
